@@ -1,16 +1,13 @@
 package com.rick1135.eventostech.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Table(name = "event")
 @Entity
@@ -28,5 +25,11 @@ public class Event {
     private String imgUrl;
     private String eventUrl;
     private Boolean remoto;
-    private Date date;
+    private LocalDateTime date;
+
+    @OneToMany(mappedBy = "event")
+    private List<Coupon> coupons;
+
+    @OneToOne(mappedBy = "event")
+    private Address address;
 }

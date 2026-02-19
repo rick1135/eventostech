@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -20,9 +22,9 @@ public class Coupon {
 
     private String code;
     private Integer discount;
-    private Date validUntil;
+    private LocalDateTime validUntil;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    private Event event_id;
+    private Event event;
 }
