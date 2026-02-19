@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 325158
-      POSTGRES_DB: eventostech_db
+      POSTGRES_DB: eventostech
     ports:
       - "5432:5432"
     volumes:
