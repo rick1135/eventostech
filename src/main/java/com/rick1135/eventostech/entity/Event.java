@@ -24,7 +24,7 @@ public class Event {
     private String description;
     private String imgUrl;
     private String eventUrl;
-    private Boolean remoto;
+    private Boolean remote;
     private LocalDateTime date;
 
     @OneToMany(mappedBy = "event")
