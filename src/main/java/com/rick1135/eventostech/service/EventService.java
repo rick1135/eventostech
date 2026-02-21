@@ -4,9 +4,17 @@ import com.rick1135.eventostech.dto.EventRequestDTO;
 import com.rick1135.eventostech.dto.EventResponseDTO;
 import com.rick1135.eventostech.entity.Event;
 import com.rick1135.eventostech.repositories.EventRepository;
+import com.rick1135.eventostech.repositories.EventSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +54,32 @@ public class EventService {
                 newEvent.getEventUrl(),
                 newEvent.getImgUrl()
         );
+    }
+
+    public Page<EventResponseDTO> getUpcomingEvents(int page, int size, String title, String city, String uf, Boolean remote, LocalDateTime startDate, LocalDateTime endDate) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        if(startDate == null) {
+            startDate = LocalDateTime.now();
+        }
+
+        Specification<Event> spec = Specification.where(EventSpecification.hasTitle(title))
+                .and(EventSpecification.hasCity(city))
+                .and(EventSpecification.hasUf(uf))
+                .and(EventSpecification.isRemote(remote))
+                .and(EventSpecification.startDateAfter(startDate))
+                .and(EventSpecification.endDateBefore(endDate));
+
+        return this.eventRepository.findAll(spec, pageable).map(event -> new EventResponseDTO (
+                event.getId(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getDate(),
+                event.getAddress() != null ? event.getAddress().getCity() : null,
+                event.getAddress() != null ? event.getAddress().getUf() : null,
+                event.getRemote(),
+                event.getEventUrl(),
+                event.getImgUrl()
+        ));
     }
 }
