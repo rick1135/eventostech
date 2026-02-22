@@ -8,7 +8,7 @@ Construída com **Spring Boot 4**, **PostgreSQL**, **Flyway** e containerizada c
 
 ## 🚀 Tecnologias
 
-* **Linguagem:** Java Java 21 
+* **Linguagem:** Java 21 
 
 * **Framework:** Spring Boot 4.0.3 (Web, Data JPA, Validation)
 
