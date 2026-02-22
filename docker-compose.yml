@@ -10,6 +10,29 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d eventostech"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eventostech-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: eventostech
+      DB_USER: postgres
+      DB_PASSWORD: 325158
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
 
   # interface pra ver o banco sem instalar nada (PgAdmin)
   pgadmin:

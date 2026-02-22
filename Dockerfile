@@ -1,8 +1,4 @@
-FROM ubuntu:latest
-LABEL authors="Rick"
-
-ENTRYPOINT ["top", "-b"]
-
+# ---- Stage 1: Build ----
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 WORKDIR /app
@@ -15,7 +11,10 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests
 
+# ---- Stage 2: Runtime ----
 FROM eclipse-temurin:21-jre-alpine
+
+LABEL authors="Rick"
 
 WORKDIR /app
 
