@@ -1,5 +1,6 @@
 package com.rick1135.eventostech.controller;
 
+import com.rick1135.eventostech.dto.EventDetailsDTO;
 import com.rick1135.eventostech.dto.EventRequestDTO;
 import com.rick1135.eventostech.dto.EventResponseDTO;
 import com.rick1135.eventostech.service.EventService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/events")
@@ -40,5 +42,11 @@ public class EventController {
         Page<EventResponseDTO> allEvents = this.eventService.getUpcomingEvents(page, size, title, city, uf, remote, startDate, endDate);
         return ResponseEntity.status(HttpStatus.OK).body(allEvents);
 
+    }
+
+    @GetMapping("/{eventId}")
+    public ResponseEntity<EventDetailsDTO> getEventDetails(@PathVariable UUID eventId) {
+        EventDetailsDTO eventDetails = this.eventService.getEventDetails(eventId);
+        return ResponseEntity.status(HttpStatus.OK).body(eventDetails);
     }
 }

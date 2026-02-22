@@ -10,5 +10,4 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID>, JpaSpecificationExecutor<Event> {
-    public Page<Event> findUpcomingEvents(LocalDateTime date, Pageable pageable);
 }

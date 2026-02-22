@@ -1,7 +1,10 @@
 package com.rick1135.eventostech.service;
 
+import com.rick1135.eventostech.dto.EventDetailsDTO;
 import com.rick1135.eventostech.dto.EventRequestDTO;
 import com.rick1135.eventostech.dto.EventResponseDTO;
+import com.rick1135.eventostech.entity.Address;
+import com.rick1135.eventostech.entity.Coupon;
 import com.rick1135.eventostech.entity.Event;
 import com.rick1135.eventostech.repositories.EventRepository;
 import com.rick1135.eventostech.repositories.EventSpecification;
@@ -14,13 +17,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
     private final AddressService addressService;
+    private final CouponService couponService;
 
     @Transactional
     public EventResponseDTO createEvent(EventRequestDTO data) {
@@ -81,5 +88,28 @@ public class EventService {
                 event.getEventUrl(),
                 event.getImgUrl()
         ));
+    }
+
+    public EventDetailsDTO getEventDetails(UUID eventId){
+            Event event = this.eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+            Optional<Address> address = addressService.findByEventId(eventId);
+            List<Coupon> coupons = couponService.consultCoupons(eventId, LocalDateTime.now());
+            List<EventDetailsDTO.CouponDTO> couponDTOS = coupons.stream().map(coupon -> new EventDetailsDTO.CouponDTO(
+                    coupon.getCode(),
+                    coupon.getDiscount(),
+                    coupon.getValidUntil()
+            )).toList();
+
+            return new EventDetailsDTO(
+                    event.getId(),
+                    event.getTitle(),
+                    event.getDescription(),
+                    event.getDate(),
+                    address.map(Address::getCity).orElse(null),
+                    address.map(Address::getUf).orElse(null),
+                    event.getImgUrl(),
+                    event.getEventUrl(),
+                    couponDTOS
+            );
     }
 }

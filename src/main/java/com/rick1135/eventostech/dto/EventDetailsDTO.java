@@ -9,7 +9,7 @@ public record EventDetailsDTO(
         String description,
         LocalDateTime date,
         String city,
-        String state,
+        String uf,
         String imgUrl,
         String eventUrl,
         List<CouponDTO> coupons) {

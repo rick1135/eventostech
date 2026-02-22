@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,5 +38,9 @@ public class CouponService {
                 coupon.getDiscount(),
                 coupon.getValidUntil()
         );
+    }
+
+    public List<Coupon> consultCoupons(UUID eventId, LocalDateTime currentDate) {
+        return couponRepository.findByEventIdAndValidCoupons(eventId, currentDate);
     }
 }
