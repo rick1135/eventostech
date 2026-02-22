@@ -14,7 +14,7 @@ public record EventRequestDTO(
         @NotBlank String description,
         @NotNull LocalDateTime date,
         String city,
-        String state,
+        String uf,
         @NotNull Boolean remote,
         String eventUrl,
         String imgUrl) {

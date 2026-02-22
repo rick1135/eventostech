@@ -66,18 +66,25 @@ public class EventService {
     public Page<EventResponseDTO> getUpcomingEvents(int page, int size, String title, String city, String uf, Boolean remote, LocalDateTime startDate, LocalDateTime endDate) {
         Pageable pageable = PageRequest.of(page, size);
 
-        if(startDate == null) {
+        if (startDate == null) {
             startDate = LocalDateTime.now();
+        }Specification<Event> spec = Specification.where(EventSpecification.hasTitle(title));
+
+        if (city != null) {
+            spec = spec.and(EventSpecification.hasCity(city));
+        }
+        if (uf != null) {
+            spec = spec.and(EventSpecification.hasUf(uf));
+        }
+        if (remote != null) {
+            spec = spec.and(EventSpecification.isRemote(remote));
+        }
+        spec = spec.and(EventSpecification.startDateAfter(startDate));
+        if (endDate != null) {
+            spec = spec.and(EventSpecification.endDateBefore(endDate));
         }
 
-        Specification<Event> spec = Specification.where(EventSpecification.hasTitle(title))
-                .and(EventSpecification.hasCity(city))
-                .and(EventSpecification.hasUf(uf))
-                .and(EventSpecification.isRemote(remote))
-                .and(EventSpecification.startDateAfter(startDate))
-                .and(EventSpecification.endDateBefore(endDate));
-
-        return this.eventRepository.findAll(spec, pageable).map(event -> new EventResponseDTO (
+        return this.eventRepository.findAll(spec, pageable).map(event -> new EventResponseDTO(
                 event.getId(),
                 event.getTitle(),
                 event.getDescription(),
@@ -89,6 +96,7 @@ public class EventService {
                 event.getImgUrl()
         ));
     }
+
 
     public EventDetailsDTO getEventDetails(UUID eventId){
             Event event = this.eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Evento não encontrado"));
