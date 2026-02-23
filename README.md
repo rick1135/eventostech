@@ -16,7 +16,7 @@ Construída com **Spring Boot 4**, **PostgreSQL**, **Flyway** e containerizada c
 
 * **Migrations:** Flyway
 
-* **Infraestrutura:** Docker (para conteinerização do banco de dados)
+* **Infraestrutura:** Docker & Docker Compose
 
 * **Utilitários:** Lombok
 
@@ -56,24 +56,44 @@ O projeto segue uma arquitetura em camadas:
 ## 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
-* Java JDK 21+ instalado.
-* Maven instalado.
-* Docker e Docker Compose instalados.
+* **Docker** e **Docker Compose** instalados (para rodar tudo containerizado).
+* **Java JDK 21+** e **Maven** (apenas se quiser rodar a aplicação localmente).
 
-### Passos
+### Opção 1 — Tudo com Docker Compose (recomendado)
 
-1. **Clone o repositório:**
+Sobe o banco, a aplicação e o PgAdmin com um único comando:
+
+```bash
+docker compose up -d --build
+```
+
+| Serviço | URL | Descrição |
+|---|---|---|
+| **API** | `http://localhost:8080` | Aplicação Spring Boot |
+| **PostgreSQL** | `localhost:5432` | Banco de dados |
+| **PgAdmin** | `http://localhost:5050` | Interface web do banco (`admin@admin.com` / `admin`) |
+
+Para parar tudo:
+```bash
+docker compose down
+```
+
+### Opção 2 — Desenvolvimento Local (banco no Docker, app fora)
+
+1. **Suba apenas o banco:**
    ```bash
-   git clone [https://github.com/rick1135/eventostech.git](https://github.com/rick1135/eventostech.git)
-   cd eventostech
-   
-2. **Suba o Banco com o Docker:**
-   Certifique-se de ter um arquivo docker-compose.yml configurado para o PostgreSQL e execute
+   docker compose up db -d
+   ```
+
+2. **Execute a aplicação com Maven:**
    ```bash
-   docker-compose up -d
-   
-3. **Execute a aplicação:**
-   As tabelas serão criadas automaticamente pelo Flyway na inicialização
+   # Linux/Mac
+   ./mvnw spring-boot:run
+
+   # Windows
+   mvnw.cmd spring-boot:run
+   ```
+
     
 ## 📡 Endpoints da API
 
