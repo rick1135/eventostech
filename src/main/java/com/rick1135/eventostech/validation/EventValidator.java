@@ -15,6 +15,6 @@ public class EventValidator implements ConstraintValidator<EventValidation, Even
         if(eventRequestDTO.remote()){
             return !isBlank(eventRequestDTO.eventUrl());
         } else
-            return !isBlank(eventRequestDTO.city()) && !isBlank(eventRequestDTO.state());
+            return !isBlank(eventRequestDTO.city()) && !isBlank(eventRequestDTO.uf());
     }
 }

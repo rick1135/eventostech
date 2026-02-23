@@ -56,7 +56,7 @@ public class EventService {
                 newEvent.getDescription(),
                 newEvent.getDate(),
                 data.city(),
-                data.state(),
+                data.uf(),
                 newEvent.getRemote(),
                 newEvent.getEventUrl(),
                 newEvent.getImgUrl()
